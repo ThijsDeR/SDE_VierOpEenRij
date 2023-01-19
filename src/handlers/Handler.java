@@ -7,4 +7,6 @@ public interface Handler {
     {
         System.out.println(String.format("Cannot find command '%s'", methodName));
     };
+
+    void beginScreen(String[] args);
 }

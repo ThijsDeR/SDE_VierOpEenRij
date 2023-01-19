@@ -48,4 +48,9 @@ public class IdleHandler implements Handler {
         this.cantFindCommand(methodName, args);
         return HandlerState.IDLE;
     }
+
+    @Override
+    public void beginScreen(String[] args) {
+        
+    }
 }

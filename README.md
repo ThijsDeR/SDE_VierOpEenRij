@@ -31,14 +31,18 @@ our division of tasks.
 
 ### 2.1 Creational patterns
 #### 2.1.1 Singleton
-At all times you should only have one game. 
+At all times you should only have one instance of a class.
+
+In our application, there should only exist one game while active, so we chose for a singleton pattern so that we can always access the same game everywhere, and to make sure a game does not exist elsewhere.
 
 // uitleg werking
 
 #### 2.1.2 Builder
-Creates different kind of boards, think of dimensions, configurations, etc.)
+Use a builder to create different kinds of a class with an interface.
 
-// uitleg werking
+In our application, we can have different kinds of the game. Think about the dimensions or the chips in a row needed to win. To make this easier, we used a builder.
+
+// uitleg werking 
 
 ### 2.2 Structural patterns
 #### 2.2.1 Facade 

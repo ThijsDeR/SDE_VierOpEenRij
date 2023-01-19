@@ -1,18 +1,16 @@
 package handlers;
 
-import java.lang.reflect.Method;
-
 class Stats {
 
     private static Stats single_instance = null;
 
-    public static int player1Wins;
-    public static int player1Losses;
-    public static int player1Draws;
+    public int player1Wins;
+    public int player1Losses;
+    public int player1Draws;
 
-    public static int player2Wins;
-    public static int player2Losses;
-    public static int player2Draws;
+    public int player2Wins;
+    public int player2Losses;
+    public int player2Draws;
 
     public Stats()
     {
@@ -33,7 +31,7 @@ class Stats {
         return single_instance;
     }
 
-    public static void win(Integer player) {
+    public void win(Integer player) {
         if (player == 1) {
             player1Wins += 1;
             player2Losses += 1;
@@ -43,7 +41,7 @@ class Stats {
         }
     }
 
-    public static void draw() {
+    public void draw() {
         player1Draws += 1;
         player2Draws += 1;
     }

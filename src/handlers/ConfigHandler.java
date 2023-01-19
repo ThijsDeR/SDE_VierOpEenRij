@@ -47,4 +47,9 @@ public class ConfigHandler implements Handler {
         this.cantFindCommand(methodName, args);
         return HandlerState.IN_CONFIG;
     }
+
+    @Override
+    public void beginScreen(String[] args) {
+        
+    }
 }

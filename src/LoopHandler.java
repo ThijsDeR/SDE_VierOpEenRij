@@ -30,7 +30,13 @@ public class LoopHandler {
             String command = input.split(" ")[0];
             String[] args = Arrays.copyOfRange(input.split(" "), 1, input.length());
             Handler handler = this.getHandler();
-            this.state = handler.invoke(command, args);
+
+            System.out.print("\033[2J\033[1;1H");
+            HandlerState newState = handler.invoke(command, args);
+            if (this.state != newState) {
+                this.state = newState;
+                if (!this.state.equals(HandlerState.EXIT)) this.getHandler().beginScreen(args);
+            }
         }
     }
 
