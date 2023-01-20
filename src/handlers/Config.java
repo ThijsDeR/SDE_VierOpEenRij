@@ -10,7 +10,7 @@ public class Config {
     {
         columns = 7;
         rows = 6;
-        rowNeeded = 2;
+        rowNeeded = 4;
     }
 
     public void setColumns(int newColumns)
