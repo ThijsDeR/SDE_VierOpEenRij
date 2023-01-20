@@ -1,6 +1,5 @@
 package handlers;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -45,8 +44,8 @@ public class Game {
         Config config = Config.getInstance();
         GameBuilder gameBuilder = new GameBuilder();
         gameBuilder.setColumns(config.columns);
-        gameBuilder.setrows(config.rows);
-        gameBuilder.setrowNeeded(config.rowNeeded);
+        gameBuilder.setRows(config.rows);
+        gameBuilder.setRowNeeded(config.rowNeeded);
 
         return gameBuilder.create();
     }
@@ -127,13 +126,13 @@ public class Game {
         if (this.done) System.out.println("\nYou can start another game with 'start'");
     }
 
-    public void showCurrentPlayer() 
+    public void showCurrentPlayer()
     {
         String player = playerTurn == 1 ? "Player 1 (X)" : "Player 2 (O)";
         System.out.println(player + ": ");
     }
 
-    public void makeTurn(int columnNumber) 
+    public void makeTurn(int columnNumber)
     {
         columnNumber = Math.min(Math.max(columnNumber, 1), this.columns);
         int[] column = this.getColumn(columnNumber);
