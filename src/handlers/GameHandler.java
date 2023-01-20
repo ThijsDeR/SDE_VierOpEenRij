@@ -56,7 +56,10 @@ public class GameHandler implements HandlerState {
     public void showHelp(String[] args)
     {
         System.out.println(
-                "board: Show the board"
+                "board: Show the board \n" +
+                        "c <number>: Make a turn in column <number> \n" +
+                        "exit: Exit the game \n" +
+                        "help: Show this help message \n"
         );
     }
 }

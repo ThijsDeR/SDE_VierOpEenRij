@@ -15,7 +15,13 @@ public class IdleHandler implements HandlerState {
 
     public void showHelp(String[] args)
     {
-        System.out.println("Sewi");
+        System.out.println("" +
+                "start \t\t Start a new game \n" +
+                "config\t\t Go to the config menu \n" +
+                "stats \t\t Show the stats \n" +
+                "exit \t\t Exit the game \n" +
+                "help \t\t Show this help "
+                );
     }
 
     public void printStats () {
