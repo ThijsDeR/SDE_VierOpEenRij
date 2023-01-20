@@ -3,24 +3,24 @@ package handlers;
 public class Config {
     private static Config single_instance = null;
 
-    public int columnSize;
-    public int rowSize;
+    public int columns;
+    public int rows;
     public int rowNeeded;
     public Config()
     {
-        columnSize = 6;
-        rowSize = 7;
-        rowNeeded = 4;
+        columns = 7;
+        rows = 6;
+        rowNeeded = 2;
     }
 
-    public void setColumnSize(int newColumnSize)
+    public void setColumns(int newColumns)
     {
-        columnSize = newColumnSize;
+        columns = newColumns;
     }
 
-    public void setRowSize(int newRowSize)
+    public void setRows(int newRows)
     {
-        rowSize = newRowSize;
+        rows = newRows;
     }
 
     public void setRowNeeded(int newRowNeeded)

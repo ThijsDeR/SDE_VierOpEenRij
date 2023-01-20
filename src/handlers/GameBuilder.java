@@ -1,8 +1,8 @@
 package handlers;
 
 public class GameBuilder {
-    public int columnSize = 7;
-    public int rowSize = 6;
+    public int columns = 7;
+    public int rows = 6;
     public int rowNeeded = 4;
 
 
@@ -11,9 +11,8 @@ public class GameBuilder {
 
     }
 
-    public void setColumnSize(int newColumnSize) { this.columnSize = newColumnSize; }
-    public void setrowSize(int newrowSize) { this.rowSize = newrowSize; }
+    public void setColumns(int newColumns) { this.columns = newColumns; }
+    public void setrows(int newrows) { this.rows = newrows; }
     public void setrowNeeded(int newrowNeeded) { this.rowNeeded = newrowNeeded; }
-    public Game create() { return new Game(this.columnSize, this.rowSize, this.rowNeeded); }
-
+    public Game create() { return new Game(this.columns, this.rows, this.rowNeeded); }
 }

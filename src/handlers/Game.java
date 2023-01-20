@@ -1,13 +1,14 @@
 package handlers;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Game {
     private int[][] boardChips;
 
-    private int columnSize;
-    private int rowSize;
+    private int columns;
+    private int rows;
     private int rowNeeded;
 
     private int playerTurn;
@@ -21,9 +22,9 @@ public class Game {
         this.setGame(columnSize, rowSize, rowNeeded);
     }
 
-    public void setGame(int columnSize, int rowSize, int rowNeeded) {
-        this.columnSize = columnSize;
-        this.rowSize = rowSize;
+    public void setGame(int columns, int rows, int rowNeeded) {
+        this.columns = columns;
+        this.rows = rows;
         this.rowNeeded = rowNeeded;
         this.playerTurn = 1;
         this.done = false;
@@ -43,8 +44,8 @@ public class Game {
     {
         Config config = Config.getInstance();
         GameBuilder gameBuilder = new GameBuilder();
-        gameBuilder.setColumnSize(config.columnSize);
-        gameBuilder.setrowSize(config.rowSize);
+        gameBuilder.setColumns(config.columns);
+        gameBuilder.setrows(config.rows);
         gameBuilder.setrowNeeded(config.rowNeeded);
 
         return gameBuilder.create();
@@ -52,7 +53,7 @@ public class Game {
 
     public void resetBoard()
     {
-        boardChips = new int[this.columnSize][this.rowSize];
+        boardChips = new int[this.rows][this.columns];
     }
 
     /**
@@ -68,18 +69,29 @@ public class Game {
      */
 
     public void showBoard () {
-        String rowLine = "-" + "--".repeat(this.rowSize) + "\n";
+        String rowLine = "-" + "--".repeat(this.columns) + "\n";
         String boardString = "";
 
-        boardString += " ";
-        for (int r = 0; r < this.rowSize; r++) {
-            boardString += Integer.toString(r + 1) + " ";
+        String[][] stringRows = new String[2][99];
+        for (int r = 0; r < this.columns; r++) {
+            String[] item = Integer.toString(r + 1).split("");
+            if (item.length == 2) {
+                stringRows[0][r] = item[0];
+                stringRows[1][r] = item[1];
+            }
+            else stringRows[1][r] = item[0];
+        }
+        for(String[] row : stringRows)
+        {
+            boardString += " ";
+            for(int r = 0; r < this.columns; r++) { boardString += (row[r] != null ? row[r] : " ") + " "; }
+            boardString += "\n";
         }
         boardString += "\n";
-        for (int c = 0; c < this.columnSize; c++) {
+        for (int r = 0; r < this.rows; r++) {
             boardString += "|";
-            for (int r = 0; r < this.rowSize; r++) {
-                int item = boardChips[c][r];
+            for (int c = 0; c < this.columns; c++) {
+                int item = boardChips[r][c];
                 String itemString = " ";
                 if (item == 1) itemString = "x";
                 else if (item == 2) itemString = "0";
@@ -94,12 +106,13 @@ public class Game {
         System.out.println(boardString);
 
         Stats stats = Stats.getInstance();
-        if (this.checkWin(1))
+        int winner = this.checkWin();
+        if (winner == 1)
         {
             stats.win(1);
             System.out.println("Player 1 Has won!");
             this.done = true;
-        } else if (this.checkWin(2))
+        } else if (winner == 2)
         {
             stats.win(2);
             System.out.println("Player 2 Has won!");
@@ -122,7 +135,7 @@ public class Game {
 
     public void makeTurn(int columnNumber) 
     {
-        columnNumber = Math.min(Math.max(columnNumber, 1), this.rowSize);
+        columnNumber = Math.min(Math.max(columnNumber, 1), this.columns);
         int[] column = this.getColumn(columnNumber);
         int emptyCounter = 0;
         for(int item : column) {
@@ -136,31 +149,12 @@ public class Game {
         }
     }
 
-    public void printTable()
-    {
-        String tableText = "[";
-        for(int i = 0; i < this.boardChips.length; i++)
-        {
-            tableText += "\n\t[";
-            for(int j = 0; j < this.boardChips[i].length; j++)
-            {
-                int item = this.boardChips[i][j];
-                tableText += Integer.toString(item) + (j == this.boardChips[i].length - 1 ? "" : ", ");
-            }
-            tableText += "]";
-        }
-
-        tableText += "\n]";
-
-        System.out.println(tableText);
-    }
-
     public int[] getColumn(int columnNumber)
     {
-        int[] column = new int[this.columnSize];
-        for(int i = 0; i < this.columnSize; i++)
+        int[] column = new int[this.rows];
+        for(int i = 0; i < this.rows; i++)
         {
-            column[i] = boardChips[this.columnSize - 1 - i][columnNumber - 1];
+            column[i] = boardChips[this.rows - 1 - i][columnNumber - 1];
         }
 
         return column;
@@ -180,113 +174,144 @@ public class Game {
         return draw;
     }
 
-    public boolean checkWin(int player)
+    public Integer checkWin()
     {
         boolean won = false;
-        for(int r = 0; r < this.columnSize; r++)
+        int playerWon = 0;
+        Iterator<Iterator<Iterator<Integer>>> allWinIterators = this.getAllIterator();
+        int winIteratorCount = 0;
+        while(allWinIterators.hasNext() && !won)
         {
-            for(int c = 0; c < this.rowSize; c++)
+            Iterator<Iterator<Integer>> winIterator = allWinIterators.next();
+            winIteratorCount++;
+            int itemIteratorCount = 0;
+            while (winIterator.hasNext() && !won)
             {
-                Iterator<Iterator<Integer>> iterators = getIterators(r, c);
-                Iterator<Integer> sideIterator = iterators.next();
-                while (sideIterator != null)
+                int currentPlayer = 0;
+                int count = 0;
+                Iterator<Integer> itemIterator = winIterator.next();
+                itemIteratorCount++;
+                while (itemIterator.hasNext() && !won)
                 {
-                    Integer item = sideIterator.next();
-                    boolean allPlayerOne = true;
-                    while (item != null)
-                    {
-                        if (item != player) allPlayerOne = false;
-                        if (sideIterator.hasNext()) item = sideIterator.next();
-                        else item = null;
+                    Integer item = itemIterator.next();
+                    if (item == currentPlayer && item != 0) {
+                        count++;
+                        if (count == this.rowNeeded) {
+                            won = true;
+                            playerWon = currentPlayer;
+                        }
+                    } else{
+                        currentPlayer = item;
+                        count = 1;
                     }
-
-                    if (allPlayerOne) won = true;
-                    if (iterators.hasNext()) sideIterator = iterators.next();
-                    else sideIterator = null;
                 }
             }
         }
 
-        return won;
+        return playerWon;
     }
 
-    public Iterator<Iterator<Integer>> getIterators(int row, int column)
+    private Iterator<Iterator<Iterator<Integer>>> getAllIterator()
     {
-        ArrayList<Iterator<Integer>> iterators = new ArrayList<>();
-        iterators.add(getLeftHorizontalIterator(row, column));
-        iterators.add(getRightHorizontalIterator(row, column));
-        iterators.add(getTopVerticalIterator(row, column));
-        iterators.add(getBottomVerticalIterator(row, column));
-        iterators.add(getTopLeftCornerIterator(row, column));
-        iterators.add(getTopRightCornerIterator(row, column));
-        iterators.add(getBottomRightCornerIterator(row, column));
-        iterators.add(getBottomLeftCornerIterator(row, column));
+        ArrayList<Iterator<Iterator<Integer>>> iterators = new ArrayList<>();
+        iterators.add(getHorizontalIterators());
+        iterators.add(getVerticalIterators());
+        iterators.add(getBottomLeftToTopRightDiagonalIterators());
+        iterators.add(getTopLeftToBottomRightDiagonalIterators());
         return iterators.iterator();
     }
 
-    public Iterator<Integer> getLeftHorizontalIterator(int row, int column)
+    private Iterator<Iterator<Integer>> getHorizontalIterators()
     {
-        ArrayList<Integer> leftHorizontal = new ArrayList<>();
-        for (int i = 0; i < this.rowNeeded; i++)
+        ArrayList<Iterator<Integer>> iterators = new ArrayList<>();
+        for(int i = 0; i < this.rows; i++)
         {
-            int item;
-            if (column - i < 0) item = 0;
-            else {
-                int[] rowArray = boardChips[row];
-                item = rowArray[column - i];
-            }
-            leftHorizontal.add(item);
+            iterators.add(getHorizontalIterator(i));
         }
 
-        return leftHorizontal.iterator();
+        return iterators.iterator();
     }
 
-    public Iterator<Integer> getRightHorizontalIterator(int row, int column)
+    private Iterator<Integer> getHorizontalIterator(int row)
     {
-        ArrayList<Integer> rightHorizontal = new ArrayList<>();
-        for(int i = 0; i < this.rowNeeded; i++)
+        ArrayList<Integer> iterator = new ArrayList<>();
+        for(int i = 0; i < this.columns; i++)
         {
-            int item;
-            if (column + i > this.rowSize - 1) item = 0;
-            else item = boardChips[row][column + i];
-            rightHorizontal.add(item);
+            iterator.add(this.boardChips[row][i]);
         }
 
-        return rightHorizontal.iterator();
+        return iterator.iterator();
     }
 
-    public Iterator<Integer> getTopVerticalIterator(int row, int column)
+    private Iterator<Iterator<Integer>> getVerticalIterators()
     {
-        ArrayList<Integer> topVertical = new ArrayList<>();
-        for(int i = 0; i < this.rowNeeded; i++)
+        ArrayList<Iterator<Integer>> iterators = new ArrayList<>();
+        for(int i = 0; i < this.columns; i++)
         {
-            int item;
-            if (row - i < 0) item = 0;
-            else item = boardChips[row - i][column];
-            topVertical.add(item);
+            iterators.add(getVerticalIterator(i));
         }
 
-        return topVertical.iterator();
+        return iterators.iterator();
     }
 
-    public Iterator<Integer> getBottomVerticalIterator(int row, int column)
+    private Iterator<Integer> getVerticalIterator(int column)
     {
-        ArrayList<Integer> bottomVertical = new ArrayList<>();
-        for(int i = 0; i < this.rowNeeded; i++)
+        ArrayList<Integer> iterator = new ArrayList<>();
+        for(int i = 0; i < this.rows; i++)
         {
-            int item;
-            if (row + i > this.columnSize - 1) item = 0;
-            else item = boardChips[row + i][column];
-            bottomVertical.add(item);
+            iterator.add(this.boardChips[i][column]);
         }
 
-        return bottomVertical.iterator();
+        return iterator.iterator();
     }
 
-    public Iterator<Integer> getTopLeftCornerIterator(int row, int column)
+    private Iterator<Iterator<Integer>> getBottomLeftToTopRightDiagonalIterators()
+    {
+        ArrayList<Iterator<Integer>> iterators = new ArrayList<>();
+        for (int i = 0; i < this.rows ; i++) {
+            iterators.add(getBottomLeftToTopRightDiagonalIterator(i, 0, Math.min(this.rows, this.columns)));
+        }
+
+        for (int i = 0; i < this.columns ; i++) {
+            iterators.add(getBottomLeftToTopRightDiagonalIterator(this.rows - 1, i, Math.min(this.rows, this.columns)));
+        }
+
+        return iterators.iterator();
+    }
+
+    private Iterator<Integer> getBottomLeftToTopRightDiagonalIterator(int row, int column, int size)
     {
         ArrayList<Integer> topLeftCorner = new ArrayList<>();
-        for(int i = 0; i < this.rowNeeded; i++)
+        for(int i = 0; i < size; i++)
+        {
+            int item;
+            if (column + i > this.columns - 1) item = 0;
+            else if (row - i < 0) item = 0;
+            else item = boardChips[row - i][column + i];
+            topLeftCorner.add(item);
+        }
+
+        return topLeftCorner.iterator();
+    }
+
+    private Iterator<Iterator<Integer>> getTopLeftToBottomRightDiagonalIterators()
+    {
+        ArrayList<Iterator<Integer>> iterators = new ArrayList<>();
+        for (int i = 0; i < this.rows; i++)
+        {
+            iterators.add(getTopLeftToBottomRightDiagonalIterator(i, this.columns - 1, Math.min(this.rows, this.columns)));
+        }
+        for (int i = 0; i < this.columns; i++) {
+            iterators.add(getTopLeftToBottomRightDiagonalIterator(this.rows - 1, i, Math.min(this.rows, this.columns)));
+        }
+
+        return iterators.iterator();
+    }
+
+    private Iterator<Integer> getTopLeftToBottomRightDiagonalIterator(int row, int column, int size)
+    {
+        ArrayList<Integer> topLeftCorner = new ArrayList<>();
+        for(int i = 0; i < size; i++)
         {
             int item;
             if (column - i < 0) item = 0;
@@ -297,51 +322,4 @@ public class Game {
 
         return topLeftCorner.iterator();
     }
-
-    public Iterator<Integer> getTopRightCornerIterator(int row, int column)
-    {
-        ArrayList<Integer> topLeftCorner = new ArrayList<>();
-        for(int i = 0; i < this.rowNeeded; i++)
-        {
-            int item;
-            if (column + i > this.rowSize - 1) item = 0;
-            else if (row - i < 0) item = 0;
-            else item = boardChips[row - i][column + i];
-            topLeftCorner.add(item);
-        }
-
-        return topLeftCorner.iterator();
-    }
-
-    public Iterator<Integer> getBottomRightCornerIterator(int row, int column)
-    {
-        ArrayList<Integer> topLeftCorner = new ArrayList<>();
-        for(int i = 0; i < this.rowNeeded; i++)
-        {
-            int item;
-            if (column + i > this.rowSize - 1) item = 0;
-            else if (row + i > this.columnSize - 1) item = 0;
-            else item = boardChips[row + i][column + i];
-            topLeftCorner.add(item);
-        }
-
-        return topLeftCorner.iterator();
-    }
-
-    public Iterator<Integer> getBottomLeftCornerIterator(int row, int column)
-    {
-        ArrayList<Integer> topLeftCorner = new ArrayList<>();
-        for(int i = 0; i < this.rowNeeded; i++)
-        {
-            int item;
-            if (column - i < 0) item = 0;
-            else if (row + i > this.columnSize - 1) item = 0;
-            else item = boardChips[row + i][column - i];
-            topLeftCorner.add(item);
-        }
-
-        return topLeftCorner.iterator();
-    }
-
-
 }

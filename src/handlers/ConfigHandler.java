@@ -17,19 +17,19 @@ public class ConfigHandler implements HandlerState {
                 "rowsize <number> \t Change the row size to <number>");
     }
 
-    public static void setColumnSize(String[] args)
+    public static void setColumns(String[] args)
     {
         int number = Integer.parseInt(args[0]);
         if (number >= 4 && number < 20){
-            config.setColumnSize(Integer.parseInt(args[0]));
+            config.setColumns(Integer.parseInt(args[0]));
         } else {
             System.out.println("Please input a number between 4 and 20");
         }
     }
 
-    public static void setRowSize(String[] args)
+    public static void setRows(String[] args)
     {
-        config.setRowSize(Integer.parseInt(args[0]));
+        config.setRows(Integer.parseInt(args[0]));
     }
 
     @Override
@@ -43,12 +43,12 @@ public class ConfigHandler implements HandlerState {
         }
         if (methodName.equals("columnsize"))
         {
-            setColumnSize(args);
+            setColumns(args);
             return;
         }
         if (methodName.equals("rowsize"))
         {
-            setRowSize(args);
+            setRows(args);
             return;
         }
         this.cantFindCommand(methodName, args);
