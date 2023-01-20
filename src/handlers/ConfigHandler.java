@@ -1,8 +1,15 @@
 package handlers;
 
-public class ConfigHandler implements Handler {
+import main.LoopHandler;
+
+public class ConfigHandler implements HandlerState {
     static Config config = new Config();
 
+    LoopHandler loopHandler;
+    public ConfigHandler(LoopHandler loopHandler)
+    {
+        this.loopHandler = loopHandler;
+    }
     public static void showConfig()
     {
         System.out.println("Welcome to the config, here you can modify you playing board. Use the following commands \n" +
@@ -26,30 +33,24 @@ public class ConfigHandler implements Handler {
     }
 
     @Override
-    public HandlerState invoke(String methodName, String[] args) {
-        if (methodName == null) return HandlerState.IN_CONFIG;
-        if (methodName.equals("exit")) return HandlerState.EXIT;
+    public void invoke(String methodName, String[] args) {
+        if (methodName == null) return;
+        if (methodName.equals("exit")) loopHandler.changeState(new ExitHandler());
         if (methodName.equals("show"))
         {
             showConfig();
-            return HandlerState.IN_CONFIG;
+            return;
         }
         if (methodName.equals("columnsize"))
         {
             setColumnSize(args);
-            return HandlerState.IN_CONFIG;
+            return;
         }
         if (methodName.equals("rowsize"))
         {
             setRowSize(args);
-            return HandlerState.IN_CONFIG;
+            return;
         }
         this.cantFindCommand(methodName, args);
-        return HandlerState.IN_CONFIG;
-    }
-
-    @Override
-    public void beginScreen(String[] args) {
-        
     }
 }

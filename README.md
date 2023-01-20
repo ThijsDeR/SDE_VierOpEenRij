@@ -59,9 +59,12 @@ The console reader.
 #### 2.3.1 Iterator
 Iterates the chips to check if the chip besides itself has the same color. Decides when you have won the game.
 
-// uitleg werking
+In our Application, the checkWin function iterates over multiple iterators, that check if all the Integers are that
+of the same player, to indicate if the player has won.
 
 #### 2.3.2 State
-Decides if you are currently in a game. 
+Decides which state the application part is in. 
 
-// uitleg werking
+In our Application, the loophandler has a state which defines which handler it uses for input.
+This uses the HandlerState interface to declare the methods, and uses the loopHandler's changeState function to 
+change the application to a different handler.

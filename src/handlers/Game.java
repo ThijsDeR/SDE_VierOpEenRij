@@ -1,7 +1,5 @@
 package handlers;
 
-import javax.print.attribute.IntegerSyntax;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -104,7 +102,7 @@ public class Game {
         } else if (this.checkWin(2))
         {
             stats.win(2);
-            System.out.println("Player 1 Has won!");
+            System.out.println("Player 2 Has won!");
             this.done = true;
         } else if (this.checkDraw())
         {

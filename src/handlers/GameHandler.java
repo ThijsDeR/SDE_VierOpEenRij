@@ -1,26 +1,35 @@
 package handlers;
 
-public class GameHandler implements Handler {
+import main.LoopHandler;
+
+public class GameHandler implements HandlerState {
 
     public Game game;
+    public LoopHandler loopHandler;
 
-    public GameHandler()
+    public GameHandler(LoopHandler loopHandler)
     {
         game = Game.getInstance(false);
         game.resetBoard();
+        game.showBoard();
+        game.showCurrentPlayer();
+        this.loopHandler = loopHandler;
     }
     @Override
-    public HandlerState invoke(String methodName, String[] args) {
-        if (methodName == null) return HandlerState.IN_GAME;
-        if (methodName.equals("exit")) return HandlerState.EXIT;
+    public void invoke(String methodName, String[] args) {
+        if (methodName == null) return;
+        if (methodName.equals("exit")) {
+            this.loopHandler.changeState(new ExitHandler());
+            return;
+        };
         if (methodName.equals("help")) {
             showHelp(args);
-            return HandlerState.IN_GAME;
+            return;
         }
         if (methodName.equals("board")) {
             game.showBoard();
             if (!game.done) game.showCurrentPlayer();
-            return HandlerState.IN_GAME;
+            return;
         }
         if (methodName.equals("c") || methodName.equals("col") || methodName.equals("column")) {
             if (!game.done) {
@@ -29,7 +38,7 @@ public class GameHandler implements Handler {
                     game.makeTurn(columnNumber);
                 } catch (NumberFormatException e){
                     System.out.println("Please enter a valid number");
-                    return HandlerState.IN_GAME;
+                    return;
                 }
             }
             game.showBoard();
@@ -37,18 +46,11 @@ public class GameHandler implements Handler {
             if (game.done)
             {
                 game = Game.getInstance(true);
-                return HandlerState.IDLE;
+                loopHandler.changeState(new IdleHandler(this.loopHandler));
             }
-            return HandlerState.IN_GAME;
+            return;
         }
         this.cantFindCommand(methodName, args);
-        return HandlerState.IN_GAME;
-    }
-
-    public void beginScreen(String[] args)
-    {
-        game.showBoard();
-        game.showCurrentPlayer();
     }
 
     public void showHelp(String[] args)

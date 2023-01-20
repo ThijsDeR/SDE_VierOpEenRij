@@ -1,11 +1,16 @@
 package handlers;
 
-public class IdleHandler implements Handler {
-    Stats stats = new Stats();
+import main.LoopHandler;
 
-    public IdleHandler()
+public class IdleHandler implements HandlerState {
+    Stats stats = new Stats();
+    LoopHandler loopHandler;
+
+    public IdleHandler(LoopHandler loopHandler)
     {
         stats = Stats.getInstance();
+        this.loopHandler = loopHandler;
+
     }
 
     public void showHelp(String[] args)
@@ -29,28 +34,31 @@ public class IdleHandler implements Handler {
 
 
     @Override
-    public HandlerState invoke(String methodName, String[] args) {
-        if (methodName == null) return HandlerState.IDLE;
-        if (methodName.equals("exit")) return HandlerState.EXIT;
-        if (methodName.equals("start")) return HandlerState.IN_GAME;
-        if (methodName.equals("config")) return HandlerState.IN_CONFIG;
+    public void invoke(String methodName, String[] args) {
+        if (methodName == null) return;
+        if (methodName.equals("exit")) {
+            loopHandler.changeState(new ExitHandler());
+            return;
+        }
+        if (methodName.equals("start")) {
+            loopHandler.changeState(new GameHandler(this.loopHandler));
+            return;
+        }
+        if (methodName.equals("config")) {
+            loopHandler.changeState(new ConfigHandler(this.loopHandler));
+            return;
+        }
         if (methodName.equals("stat"))
         {
             printStats();
-            return HandlerState.IDLE;
+            return;
         };
         if (methodName.equals("help")) {
             showHelp(args);
-            return HandlerState.IDLE;
+            return;
         }
 
 
         this.cantFindCommand(methodName, args);
-        return HandlerState.IDLE;
-    }
-
-    @Override
-    public void beginScreen(String[] args) {
-        
     }
 }
