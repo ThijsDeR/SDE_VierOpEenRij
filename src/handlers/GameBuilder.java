@@ -12,7 +12,7 @@ public class GameBuilder {
     }
 
     public void setColumns(int newColumns) { this.columns = newColumns; }
-    public void setrows(int newrows) { this.rows = newrows; }
-    public void setrowNeeded(int newrowNeeded) { this.rowNeeded = newrowNeeded; }
+    public void setRows(int newRows) { this.rows = newRows; }
+    public void setRowNeeded(int newRowNeeded) { this.rowNeeded = newRowNeeded; }
     public Game create() { return new Game(this.columns, this.rows, this.rowNeeded); }
 }
