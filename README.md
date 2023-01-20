@@ -46,7 +46,7 @@ Use a builder to create different kinds of a class with an interface.
 In our application, we can have different kinds of the game. Think about the dimensions or the chips in a row needed 
 to win. To make this easier, we used a builder.
 
-// explanation of the code
+The builder is used in the GameHandler class. When a new game is created, the builder is used to create a new game.
 
 ### 2.2 Structural patterns
 #### 2.2.1 Facade 
@@ -70,10 +70,10 @@ of the same player, to indicate if the player has won.
 #### 2.3.2 State
 Decides which state the application part is in. 
 
-In our Application, the loophandler has a state which defines which handler it uses for input.
+In our Application, the loopHandler has a state which defines which handler it uses for input.
 This uses the HandlerState interface to declare the methods, and uses the loopHandler's changeState function to 
 change the application to a different handler.
 
 ## Authors
-* Thijs de rechter - *student* - [ThijsDeR](https://github.com/ThijsDeR/)
+* Thijs de Rechter - *student* - [ThijsDeR](https://github.com/ThijsDeR/)
 * Ivy Dekker - *student* - [Ivydk](https://github.com/Ivydk)
