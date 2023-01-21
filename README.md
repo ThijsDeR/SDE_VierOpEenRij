@@ -1,7 +1,6 @@
 # SDE Exam 3 - Vier op een rij
-[Thijs de Rechter](https://github.com/ThijsDeR/) <br>
-[Ivy Dekker](https://github.com/Ivydk)
 
+## Table of Contents
 <!-- TOC -->
 * [SDE Exam 3 - Vier op een rij](#sde-exam-3---vier-op-een-rij)
   * [1. Cooperation with team members](#1-cooperation-with-team-members)
@@ -18,7 +17,9 @@
 <!-- TOC -->
 
 ## 1. Cooperation with team members 
-Before we started coding, we decided what we wanted to create and divided the tasks. In the following list you can see 
+Before we started coding, we decided what we wanted to create and divided the tasks. In the beginning we worked with the 
+Code with me function of IntelliJ, but later we decided to 
+continue to work on our local repository. We used Git to work together on the project. In the following list you can see
 our division of tasks.
 
 * The general main function - Thijs
@@ -33,27 +34,31 @@ our division of tasks.
 #### 2.1.1 Singleton
 At all times you should only have one instance of a class.
 
-In our application, there should only exist one game while active, so we chose for a singleton pattern so that we can always access the same game everywhere, and to make sure a game does not exist elsewhere.
+In our application, there should only exist one game while active, so we chose for a singleton pattern so that we can 
+always access the same game everywhere, and to make sure a game does not exist elsewhere.
 
-// uitleg werking
+When we want to create a new game, we check if there is already a game. If there is, we return the existing game. 
+If there is no game, we create a new game and return that.
 
 #### 2.1.2 Builder
 Use a builder to create different kinds of a class with an interface.
 
-In our application, we can have different kinds of the game. Think about the dimensions or the chips in a row needed to win. To make this easier, we used a builder.
+In our application, we can have different kinds of the game. Think about the dimensions or the chips in a row needed 
+to win. To make this easier, we used a builder.
 
-// uitleg werking 
+The builder is used in the GameHandler class. When a new game is created, the builder is used to create a new game.
 
 ### 2.2 Structural patterns
 #### 2.2.1 Facade 
 When you receive input it should convert to a command.
 
-// uitleg werking
+In the IdleHandler class, we receive input from the user. We want to convert the input to a command, so we can use it 
+in the game. To do this, we use a facade pattern. We created a facade class that converts the input to a command.
 
 #### 2.2.2 Adapter 
 The console reader. 
 
-// uitleg werking
+We created the ConsoleReader class to read input from the console. We used the adapter pattern to make sure that the
 
 ### 2.3 Behavioral patterns
 #### 2.3.1 Iterator
@@ -65,6 +70,10 @@ of the same player, to indicate if the player has won.
 #### 2.3.2 State
 Decides which state the application part is in. 
 
-In our Application, the loophandler has a state which defines which handler it uses for input.
+In our Application, the loopHandler has a state which defines which handler it uses for input.
 This uses the HandlerState interface to declare the methods, and uses the loopHandler's changeState function to 
 change the application to a different handler.
+
+## Authors
+* Thijs de Rechter - *student* - [ThijsDeR](https://github.com/ThijsDeR/)
+* Ivy Dekker - *student* - [Ivydk](https://github.com/Ivydk)
