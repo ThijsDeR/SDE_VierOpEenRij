@@ -33,7 +33,7 @@ public class ConfigHandler implements HandlerState {
     public static void setColumns(String[] args)
     {
         int columnSize = Integer.parseInt(args[0]);
-        if (columnSize >= 4 && columnSize < 20){
+        if (columnSize >= 4 && columnSize <= 20){
             config.setColumns(columnSize);
             System.out.println("Changing column size to " + columnSize);
         } else {
@@ -44,7 +44,7 @@ public class ConfigHandler implements HandlerState {
     public static void setRows(String[] args)
     {
         int rowSize = Integer.parseInt(args[0]);
-        if (rowSize >= 4 && rowSize < 20){
+        if (rowSize >= 4 && rowSize <= 20){
             config.setRows(rowSize);
             System.out.println("Changing row size to " + rowSize);
         } else {
@@ -55,7 +55,7 @@ public class ConfigHandler implements HandlerState {
     public static void setRowNeeded(String[] args)
     {
         int rowNeeded = Integer.parseInt(args[0]);
-        if (rowNeeded >= 4 && rowNeeded < 20){
+        if (rowNeeded >= 4 && rowNeeded <= 20){
             config.setRowNeeded(rowNeeded);
             System.out.println("Changing row needed to " + rowNeeded);
         } else {
