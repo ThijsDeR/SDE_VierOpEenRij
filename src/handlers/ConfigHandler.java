@@ -25,7 +25,7 @@ public class ConfigHandler implements HandlerState {
         System.out.println(
                 "columnsize <number>\t Change the colum size to <number> \n" +
                 "rowsize <number> \t Change the row size to <number> \n" +
-                        "rowsneeded <number>\t Change how many chips in a row you need in order to win"+
+                        "rowsneeded <number>\t Change how many chips in a row you need in order to win \n"+
                         "create \t\t\t\t Create the board with the current config \n" +
                         "help \t\t\t\t Show this help");
     }
