@@ -6,7 +6,6 @@ import java.util.Iterator;
 
 public class Game {
     private int[][] boardChips;
-
     private int columns;
     private int rows;
     private int rowNeeded;
