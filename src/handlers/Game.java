@@ -139,7 +139,6 @@ public class Game {
         for(int item : column) {
             if (item == 0) emptyCounter++;
         }
-        System.out.println(emptyCounter);
         if (emptyCounter == 0) System.out.println("Column is already full");
         else {
             boardChips[emptyCounter - 1][columnNumber - 1] = playerTurn;

@@ -3,64 +3,73 @@ import main.LoopHandler;
 
 
 public class ConfigHandler implements HandlerState {
-    // TODO: change to get instance from config
-
     LoopHandler loopHandler;
-
     static Config config;
     public ConfigHandler(LoopHandler loopHandler)
     {
         this.loopHandler = loopHandler;
         this.config = Config.getInstance();
-        welcomConfig();
+        welcomeConfig();
     }
-    public static void welcomConfig()
+    public void welcomeConfig()
     {
-        System.out.println("Welcome to the config, here you can modify you playing board. Use the following commands");
+        System.out.println("Welcome to the config, here you can modify your playing board. Use the following commands");
         helpConfig();
     }
 
-    public static void helpConfig()
+    public void helpConfig()
     {
-        System.out.println(
-                "columnsize <number>\t Change the colum size to <number> \n" +
-                "rowsize <number> \t Change the row size to <number> \n" +
-                        "rowsneeded <number>\t Change how many chips in a row you need in order to win \n"+
-                        "create \t\t\t\t Create the board with the current config \n" +
-                        "help \t\t\t\t Show this help");
+
+        System.out.println("columns <number>" + " ".repeat(20 - ("columns <number>".length())) + "Change the colum size to <number>");
+        System.out.println("rows <number>" + " ".repeat(20 - ("rows <number>".length())) + "Change the row size to <number>");
+        System.out.println("rowneeded <number>" + " ".repeat(20 - ("rowneeded <number>".length())) + "Change how many chips in a row you need in order to win");
+        System.out.println("show" + " ".repeat(20 - ("show".length())) + "Show the current config");
+        System.out.println("back" + " ".repeat(20 - ("back".length())) + "Go back to the menu");
+        System.out.println("help" + " ".repeat(20 - ("help".length())) + "Show this menu");
     }
 
-    public static void setColumns(String[] args)
+    public void setColumns(String[] args)
     {
-        int columnSize = Integer.parseInt(args[0]);
-        if (columnSize >= 4 && columnSize <= 20){
-            config.setColumns(columnSize);
-            System.out.println("Changing column size to " + columnSize);
+        int columns = Integer.parseInt(args[0]);
+        if (columns >= 4 && columns <= 20){
+            config.setColumns(columns);
+            System.out.println("Changing column size to " + columns);
         } else {
             System.out.println("Please input a number between 4 and 20");
         }
     }
 
-    public static void setRows(String[] args)
+    public void setRows(String[] args)
     {
-        int rowSize = Integer.parseInt(args[0]);
-        if (rowSize >= 4 && rowSize <= 20){
-            config.setRows(rowSize);
-            System.out.println("Changing row size to " + rowSize);
+        int rows = Integer.parseInt(args[0]);
+        if (rows >= 4 && rows <= 20){
+            config.setRows(rows);
+            System.out.println("Changing row size to " + rows);
         } else {
             System.out.println("Please input a number between 4 and 20");
         }
     }
 
-    public static void setRowNeeded(String[] args)
+    public void setRowNeeded(String[] args)
     {
         int rowNeeded = Integer.parseInt(args[0]);
-        if (rowNeeded >= 4 && rowNeeded <= 20){
+        if (rowNeeded >= 3 && rowNeeded <= 20){
             config.setRowNeeded(rowNeeded);
             System.out.println("Changing row needed to " + rowNeeded);
         } else {
-            System.out.println("Please input a number between 4 and 20");
+            System.out.println("Please input a number between 3 and 20");
         }
+    }
+
+
+    public void showConfig(String[] args)
+    {
+        System.out.println("-------------------\n");
+        System.out.println("Columns: " + Integer.toString(config.columns));
+        System.out.println("Rows: " + Integer.toString(config.rows));
+        System.out.println("Row Needed: " + Integer.toString(config.rowNeeded));
+
+        System.out.println("\n-------------------");
     }
 
     @Override
@@ -72,24 +81,29 @@ public class ConfigHandler implements HandlerState {
             helpConfig();
             return;
         }
-        if (methodName.equals("columnsize"))
+        if (methodName.equals("columns"))
         {
             setColumns(args);
             return;
         }
-        if (methodName.equals("rowsize"))
+        if (methodName.equals("rows"))
         {
             setRows(args);
             return;
         }
-        if (methodName.equals("rowsneeded"))
+        if (methodName.equals("rowneeded"))
         {
             setRowNeeded(args);
             return;
         }
-        if (methodName.equals("create"))
+        if (methodName.equals("show"))
         {
-            System.out.println("Created board with the current config, use start to start the game");
+            showConfig(args);
+            return;
+        }
+        if (methodName.equals("back"))
+        {
+            System.out.println("Config has been saved!");
             loopHandler.changeState(new IdleHandler(this.loopHandler));
             return;
         }

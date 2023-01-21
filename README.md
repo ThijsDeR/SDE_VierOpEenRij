@@ -58,7 +58,9 @@ in the game. To do this, we use a facade pattern. We created a facade class that
 #### 2.2.2 Adapter 
 The console reader. 
 
-We created the ConsoleReader class to read input from the console. We used the adapter pattern to make sure that the
+We created the ConsoleReader class to read input from the console. 
+We used the adapter pattern to make sure that there will be no code duplication
+for reading console input, and to make it easily accessible.
 
 ### 2.3 Behavioral patterns
 #### 2.3.1 Iterator
