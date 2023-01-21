@@ -35,6 +35,7 @@ public class ConfigHandler implements HandlerState {
         int columnSize = Integer.parseInt(args[0]);
         if (columnSize >= 4 && columnSize < 20){
             config.setColumns(columnSize);
+            System.out.println("Changing column size to " + columnSize);
         } else {
             System.out.println("Please input a number between 4 and 20");
         }
@@ -45,6 +46,7 @@ public class ConfigHandler implements HandlerState {
         int rowSize = Integer.parseInt(args[0]);
         if (rowSize >= 4 && rowSize < 20){
             config.setRows(rowSize);
+            System.out.println("Changing row size to " + rowSize);
         } else {
             System.out.println("Please input a number between 4 and 20");
         }
@@ -55,6 +57,7 @@ public class ConfigHandler implements HandlerState {
         int rowNeeded = Integer.parseInt(args[0]);
         if (rowNeeded >= 4 && rowNeeded < 20){
             config.setRowNeeded(rowNeeded);
+            System.out.println("Changing row needed to " + rowNeeded);
         } else {
             System.out.println("Please input a number between 4 and 20");
         }
@@ -71,19 +74,16 @@ public class ConfigHandler implements HandlerState {
         }
         if (methodName.equals("columnsize"))
         {
-            System.out.println("Changing column size to " + args[0]);
             setColumns(args);
             return;
         }
         if (methodName.equals("rowsize"))
         {
-            System.out.println("Changing row size to " + args[0]);
             setRows(args);
             return;
         }
         if (methodName.equals("rowsneeded"))
         {
-            System.out.println("Changing row size needed to " + args[0]);
             setRowNeeded(args);
             return;
         }
