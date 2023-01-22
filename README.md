@@ -28,6 +28,8 @@ our division of tasks.
 * Config handler - Ivy
 * Game handler - Thijs
 
+Since we worked together with live share and coop in intellij, the github commits are not accurate in showing the contributions. Therefore we ask of you to refer to the list above of who did what.
+
 ## 2. Design patterns 
 
 ### 2.1 Creational patterns
@@ -52,8 +54,8 @@ The builder is used in the GameHandler class. When a new game is created, the bu
 #### 2.2.1 Facade 
 When you receive input it should convert to a command.
 
-In the IdleHandler class, we receive input from the user. We want to convert the input to a command, so we can use it 
-in the game. To do this, we use a facade pattern. We created a facade class that converts the input to a command.
+In the Handler classes, we receive input from the user. We want to convert the input to a command, so we can use it 
+but in the loophandler class, it does not need to know how it is handled. So we just pass the input that is given, and we parse it in our handler class.
 
 #### 2.2.2 Adapter 
 The console reader. 
